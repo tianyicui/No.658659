@@ -1,0 +1,12 @@
+CHIP ZeroIf {
+
+    IN
+        in[16],
+        cond;
+
+    OUT
+        out[16];
+
+    PARTS:
+        Mux16(sel=cond, a=in, b=false, out=out);
+}

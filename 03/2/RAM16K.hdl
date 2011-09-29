@@ -1,0 +1,32 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/03/2/RAM16K.hdl
+
+/**
+ * Memory of 16K registers, each 16-bit wide.  
+ * The chip facilitates read and write operations, as follows:
+ *     Read:  out(t) = RAM16K[address(t)](t)
+ *     Write: If load(t-1) then RAM16K[address(t-1)](t) = in(t-1)
+ * In words: the chip always outputs the value stored at the memory 
+ * location specified by address. If load=1, the in value is loaded 
+ * into the memory location specified by address.  This value becomes 
+ * available through the out output starting from the next time step.
+ */
+
+
+CHIP RAM16K {
+
+    IN  in[16], load, address[14];
+    OUT out[16];
+
+    PARTS:
+    RAM4K(address=address[2..13], load=l0, in=in, out=out0);
+    RAM4K(address=address[2..13], load=l1, in=in, out=out1);
+    RAM4K(address=address[2..13], load=l2, in=in, out=out2);
+    RAM4K(address=address[2..13], load=l3, in=in, out=out3);
+
+    DMux4Way(sel=address[0..1], in=load, a=l0, b=l1, c=l2, d=l3);
+    Mux4Way16(sel=address[0..1], a=out0, b=out1, c=out2, d=out3, out=out);
+
+}

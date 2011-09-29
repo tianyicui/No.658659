@@ -1,0 +1,32 @@
+// This file is part of the materials accompanying the book 
+// "The Elements of Computing Systems" by Nisan and Schocken, 
+// MIT Press. Book site: www.idc.ac.il/tecs
+// File name: projects/01/DMux4Way.hdl
+
+/**
+ * 4-way demultiplexor.  The 2-bit sel input selects the output to which 
+ * the in input will be channeled: 00 to a, 01 to b, 10 to c, 11 to d.
+ * The other outputs are set to 0.
+ */
+
+CHIP DMux4Way {
+
+    IN  in, sel[2];
+    OUT a, b, c, d;
+
+    PARTS:
+    Not(in=sel[0], out=nsel0);
+    Not(in=sel[1], out=nsel1);
+
+    And(a=nsel0, b=nsel1, out=sela);
+    And(a=sela, b=in, out=a);
+
+    And(a=sel[0], b=nsel1, out=selb);
+    And(a=selb, b=in, out=b);
+
+    And(a=nsel0, b=sel[1], out=selc);
+    And(a=selc, b=in, out=c);
+
+    And(a=sel[0], b=sel[1], out=seld);
+    And(a=seld, b=in, out=d);
+}
